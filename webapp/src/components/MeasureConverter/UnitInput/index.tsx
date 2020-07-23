@@ -44,10 +44,11 @@ export const UnitInput: React.FC<UnitInputProps> = ({
   )
 
   const [active, setActive] = useState(false)
+  const [isDirty, setIsDirty] = useState(false)
   const [query, setQuery] = useState('')
 
   // Filter to whatever unit we may be in the progress of typing
-  const filteredUnits = filterFromQuery(query)
+  const filteredUnits = filterFromQuery(isDirty ? query : '')
 
   const getUnitResult = (
     query: string,
@@ -83,6 +84,7 @@ export const UnitInput: React.FC<UnitInputProps> = ({
       query={active ? query : value?.labels[0] || ''}
       onQueryChange={(query) => {
         setQuery(query)
+        setIsDirty(true)
         onChange(getUnitResult(query, false, true))
       }}
       onSelect={(value) => {
@@ -101,6 +103,7 @@ export const UnitInput: React.FC<UnitInputProps> = ({
         }}
         onFocus={(event) => {
           setActive(true)
+          setIsDirty(false)
           setQuery(value?.labels[0] || '')
           ;(event.target as any).select()
         }}
