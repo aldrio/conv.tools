@@ -10,6 +10,7 @@ import {
   Container,
 } from 'sancho'
 import palx from 'palx'
+import BackgroundImage from 'gatsby-background-image'
 
 const scales = palx('#08e')
 const colors = generateColorsFromScales(scales)
@@ -26,7 +27,7 @@ const theme = {
 
 export type LayoutProps = {
   minimal?: boolean
-  splash?: string
+  splash?: any
 }
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -34,31 +35,38 @@ export const Layout: React.FC<LayoutProps> = ({
   minimal = false,
   splash,
 }) => {
+  let inner = (
+    <>
+      <Header minimal={minimal} />
+      {minimal ? (
+        <div css={styles.minimalContainer}>{children}</div>
+      ) : (
+        <Container>{children}</Container>
+      )}
+      <div css={styles.spacer} />
+      <Footer />
+    </>
+  )
+
+  if (splash) {
+    inner = (
+      <BackgroundImage
+        Tag="div"
+        css={styles.layout}
+        fluid={splash}
+        backgroundColor="#ccc"
+      >
+        {inner}
+      </BackgroundImage>
+    )
+  } else {
+    inner = <div css={styles.layout}>{inner}</div>
+  }
+
   return (
     <>
       <Global styles={styles.global} />
-      <ThemeProvider theme={theme}>
-        <div
-          css={[
-            styles.layout,
-            splash && {
-              backgroundImage: `url(${splash})`,
-              backgroundRepeat: 'norepeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            },
-          ]}
-        >
-          <Header minimal={minimal} />
-          {minimal ? (
-            <div css={styles.minimalContainer}>{children}</div>
-          ) : (
-            <Container>{children}</Container>
-          )}
-          <div css={styles.spacer} />
-          <Footer />
-        </div>
-      </ThemeProvider>
+      <ThemeProvider theme={theme}>{inner}</ThemeProvider>
     </>
   )
 }

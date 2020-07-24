@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { useStaticQuery, graphql } from 'gatsby'
 import { Layout } from 'components/Layout'
 import { Seo } from 'components/Seo'
 
@@ -7,12 +8,29 @@ import { Layer, Text, DarkMode, useTheme, Toolbar, Tabs, Tab } from 'sancho'
 import { MeasureConverter } from 'components/MeasureConverter'
 
 const IndexPage: React.FC<{}> = () => {
+  const { file } = useStaticQuery(graphql`
+    query LayoutQuery {
+      file(relativePath: { eq: "splash.jpg" }) {
+        childImageSharp {
+          fluid(
+            quality: 90
+            maxWidth: 1920
+            traceSVG: { color: "#CCAF9C", background: "#CDDCE2" }
+          ) {
+            ...GatsbyImageSharpFluid_withWebp_tracedSVG
+          }
+        }
+      }
+    }
+  `)
+  const splash = file.childImageSharp.fluid
+
   const theme = useTheme()
 
   const [index, setIndex] = useState(0)
 
   return (
-    <Layout minimal splash={require('./splash.jpg')}>
+    <Layout minimal splash={splash}>
       <Seo />
 
       <Layer
