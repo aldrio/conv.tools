@@ -6,6 +6,7 @@ import { Seo } from 'components/Seo'
 
 import { Layer, Text, DarkMode, useTheme, Toolbar, Tabs, Tab } from 'sancho'
 import { MeasureConverter } from 'components/MeasureConverter'
+import { FileConverter } from 'components/FileConverter'
 
 const IndexPage: React.FC<{}> = () => {
   const { file } = useStaticQuery(graphql`
@@ -49,12 +50,14 @@ const IndexPage: React.FC<{}> = () => {
               </Toolbar>
               <Tabs value={index} onChange={(i) => setIndex(i)}>
                 <Tab id="measurements">Measurements</Tab>
+                <Tab id="files">Files</Tab>
               </Tabs>
             </div>
           )}
         </DarkMode>
         <div css={{ padding: 12 }}>
-          <MeasureConverter />
+          {index === 0 && <MeasureConverter />}
+          {index === 1 && <FileConverter />}
         </div>
       </Layer>
     </Layout>
