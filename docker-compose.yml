@@ -1,0 +1,13 @@
+# For development
+
+version: "3.4"
+
+services:
+  api:
+    build:
+      context: ./api
+      target: dev
+    volumes:
+      - ./api:/go/src/api
+    ports:
+      - 8080:8080

@@ -7,8 +7,12 @@
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/css": "^10.0.27",
+    "@types/content-disposition": "^0.5.3",
+    "@types/downloadjs": "^1.4.2",
     "@types/palx": "^1.0.1",
     "@types/react-helmet": "^6.0.0",
+    "content-disposition": "^0.5.3",
+    "downloadjs": "^1.4.7",
     "emotion-normalize": "^10.1.0",
     "gatsby": "^2.23.12",
     "gatsby-background-image": "^1.1.1",
