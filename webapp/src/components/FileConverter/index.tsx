@@ -93,15 +93,14 @@ export const FileConverter: React.FC<FileConverterProps> = ({}) => {
           hint="Drop files to convert"
           accept={[...FormatMimes]}
           onDropAccepted={(files) => setFile(files[0])}
-        />
+        >
+          {itemPreview}
+        </FileInput>
 
         {file && (
           <>
             <Divider />
             <div css={styles.fileInfo}>
-              {itemPreview && (
-                <div css={styles.fileInfoItem}>{itemPreview}</div>
-              )}
               <div css={styles.fileInfoItem}>
                 <Text variant="uppercase">Type</Text>
                 <Text>{file.type}</Text>

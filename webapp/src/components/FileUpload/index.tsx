@@ -16,6 +16,7 @@ export const FileInput: React.FC<FileInputProps> = ({
   hint = 'Drag and drop some files here, or click to select files',
   hoverHint = 'Drop here...',
   onDropAccepted,
+  children,
 }) => {
   const {
     getRootProps,
@@ -40,7 +41,7 @@ export const FileInput: React.FC<FileInputProps> = ({
   return (
     <div {...getRootProps()} css={[styles.fileInput, statusStyle]}>
       <input {...getInputProps()} />
-      {isDragActive ? <p>{hoverHint}</p> : <p>{hint}</p>}
+      {children ? children : isDragActive ? <p>{hoverHint}</p> : <p>{hint}</p>}
     </div>
   )
 }
