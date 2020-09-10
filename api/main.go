@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"net/http"
 
@@ -10,11 +13,37 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
+	"github.com/h2non/bimg"
 )
 
 func imagePOST(c *gin.Context) {
 	fileHeader, _ := c.FormFile("file")
-	log.Println(fileHeader.Size, 128<<20)
+	toFormat := c.PostForm("toFormat")
+	fileName := strings.TrimSuffix(fileHeader.Filename, filepath.Ext(fileHeader.Filename))
+
+	log.Println("Convert image", fileHeader.Size, toFormat)
+
+	// Ensure supported output format
+	if toFormat != "image/png" && toFormat != "image/jpeg" && toFormat != "image/webp" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Unsupported conversion format"})
+		return
+	}
+
+	// Map formats and extension
+	ext := ""
+	bimgFormat := bimg.PNG
+	switch toFormat {
+	case "image/png":
+		ext = "png"
+		bimgFormat = bimg.PNG
+	case "image/jpeg":
+		ext = "jpg"
+		bimgFormat = bimg.JPEG
+	case "image/webp":
+		ext = "webp"
+		bimgFormat = bimg.WEBP
+	}
 
 	// capped at ~128mb
 	if fileHeader.Size > 128<<20 {
@@ -22,12 +51,17 @@ func imagePOST(c *gin.Context) {
 		return
 	}
 
+	// Read file into memory
 	file, _ := fileHeader.Open()
 	defer file.Close()
+	buffer := make([]byte, fileHeader.Size)
+	file.Read(buffer)
 
-	c.DataFromReader(http.StatusOK, fileHeader.Size, "image/jpeg", file, map[string]string{
-		"Content-Disposition": "attachment; filename=\"filename.jpg\"",
-	})
+	// Convert image
+	newImage, _ := bimg.NewImage(buffer).Convert(bimgFormat)
+
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.%s\"", fileName, ext))
+	c.Data(http.StatusOK, toFormat, newImage)
 }
 
 func setupRouter() *gin.Engine {
