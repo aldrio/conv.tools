@@ -11,3 +11,10 @@ services:
       - ./api:/go/src/api
     ports:
       - 8080:8080
+  webapp:
+    build:
+      context: ./webapp
+    volumes:
+      - ./webapp/src:/usr/src/app/src
+    ports:
+      - 8000:8000
