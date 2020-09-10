@@ -36,6 +36,7 @@ export default {
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
+    backgroundAttachment: 'fixed',
   }),
 
   content: css({
