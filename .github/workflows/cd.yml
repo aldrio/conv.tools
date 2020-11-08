@@ -31,5 +31,4 @@ jobs:
           # List of tags
           tags: |
             ${{ secrets.REGISTRY_IMAGE }}:latest
-            ${{ secrets.REGISTRY_IMAGE }}:${GITHUB_REF##*/}
             ${{ secrets.REGISTRY_IMAGE }}:${{ github.sha }}
