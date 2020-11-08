@@ -9,8 +9,6 @@ import (
 
 	"net/http"
 
-	"github.com/joho/godotenv"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
@@ -82,11 +80,6 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
 	log.Println("conv.tools conversion API")
 
 	r := setupRouter()

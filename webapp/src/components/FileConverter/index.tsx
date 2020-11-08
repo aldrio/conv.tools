@@ -9,7 +9,7 @@ import { FormatMimes, FormatMime, Formats } from './formats'
 
 export type FileConverterProps = {}
 
-export const FileConverter: React.FC<FileConverterProps> = ({}) => {
+export const FileConverter: React.FC<FileConverterProps> = ({ }) => {
   const [file, setFile] = useState<File | null>(null)
 
   const [toFormat, setToFormat] = useState<FormatMime | null>(null)
@@ -65,7 +65,7 @@ export const FileConverter: React.FC<FileConverterProps> = ({}) => {
     formData.append('file', file!)
     formData.append('toFormat', toFormat)
 
-    const res = await fetch('http://localhost:8080/image', {
+    const res = await fetch(`${process.env.GATSBY_API_URL}/image`, {
       method: 'POST',
       body: formData,
     })
@@ -131,8 +131,8 @@ export const FileConverter: React.FC<FileConverterProps> = ({}) => {
                 </Select>
               </div>
             ) : (
-              <Alert intent="danger" title="Can't convert this file" />
-            )}
+                <Alert intent="danger" title="Can't convert this file" />
+              )}
             {toFormat && (
               <div css={styles.fileInfoItem}>
                 <Button block onClick={onDownload}>
